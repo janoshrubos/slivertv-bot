@@ -1,27 +1,37 @@
 // ==UserScript==
 // @name         Sliver.tv Bot (A)
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1(.1)
 // @description  Sliver.tv betting bot
-// @author       Janos Hrubos
+// @author       Janos Hrubos / thyaguster
 // @include      https://www.sliver.tv/win/fortnite
 // @include      https://www.sliver.tv/win/pubg
+// @include      https://www.sliver.tv/win/lol
 // @include      https://www.sliver.tv/win/csgo
+// @include      https://www.sliver.tv/win/hearthstone
+// @include      https://www.sliver.tv/win/sliverspotlight
+// @include      https://www.sliver.tv/win/theta
+// @include      https://www.sliver.tv/win/wow
+// @include      https://www.sliver.tv/account/inventory
 // @match        https://www.sliver.tv/win/fortnite
 // @match        https://www.sliver.tv/win/pubg
-// @match        https://www.sliver.tv/win/cs
+// @match        https://www.sliver.tv/win/lol
+// @match        https://www.sliver.tv/win/csgo
+// @match        https://www.sliver.tv/win/hearthstone
+// @match        https://www.sliver.tv/win/sliverspotlight
+// @match        https://www.sliver.tv/win/theta
+// @match        https://www.sliver.tv/win/wow
+// @match        https://www.sliver.tv/account/inventory
 // @grant        none
 // ==/UserScript==
 
 (function() {
     var contentPanel = getEBCN('content-panel')[0];
     var miniGamePanel = getEBCN('mini-game-panel')[0];
-
     var rafflePrizes = getEBCN('prize-container');
     var fixedWallet = getEBCN('fixed-wallet')[0];
-
-    var betCards = getEBCN('bet-card');
-    var open = getEBCN('open-button');
+    var betCards = getEBCN('waw-prediction-card');
+    var open = getEBCN('action-button');
     var openCrate = getEBCN('open-crate-button');
     var cont = getEBCN('continue-button');
 
@@ -46,7 +56,7 @@
         var sel = false;
         for(let i = 0; i < getCards()[betCard].children[1].children[0].children.length; i++)
         {
-            if(getCards()[betCard].children[1].children[0].children[i].classList.contains("is-selected"))
+            if(getCards()[betCard].children[i].children[0].classList.contains("waw-prediction-choice--selected"))
             {
                 selected = i;
                 sel = true;
@@ -64,12 +74,12 @@
 
     function getCards()
     {
-        return getEBCN('bet-card');
+        return getEBCN('waw-prediction-card');
     }
 
     function isPlaced(betCard)
     {
-        return getCards()[betCard].children[1].children[0].children[0].classList.contains("is-static");
+        return getCards()[betCard].children[1].children[0].classList.contains("waw-prediction-choice--selected");
     }
 
     function print()
@@ -83,7 +93,7 @@
             }
             else
             {
-                console.log("-- Your answer: " + getCards()[i].children[1].children[0].children[whatIsSelected(i)].children[1].innerText);
+                console.log("-- Your answer: " + getCards()[i].children[1].children[0].children[0].innerText);
             }
             console.log('\n');
         }
@@ -143,7 +153,6 @@
 
     function style()
     {
-
         contentPanel.innerHTML = "";
         fixedWallet.innerHTML = "";
         miniGamePanel.style.flexBasis = "100%";
@@ -170,11 +179,11 @@
     {
         var crateInterval = setInterval(function()
                                         {
-            if (getEBCN('continue-button').length == 0  && getEBCN('crate-inventory-type').length > 0)
+            if (getEBCN('continue-button').length == 0 && getEBCN('crate-inventory-type').length > 0)
             {
                 for (let i = 0 ; i < getEBCN('crate-inventory-type').length; i++)
                 {
-                    getEBCN('crate-inventory-type')[0].children[3].click();
+                    getEBCN('crate-inventory-type')[0].children[4].click();
                     setTimeout(function() {getEBCN('open-crate-button')[0].click();}, 1000);
                     setTimeout(function() {getEBCN('continue-button')[0].click();}, 13000);
                 }
@@ -206,16 +215,30 @@
         {
             setTimeout(function()
                        {
-                getEBCN('coins-inventory-type')[i].children[3].children[0].click();
+                getEBCN('coins-inventory-type')[i].children[4].children[0].click();
             }, 1000);
         }
         console.log(length + " coin(s) opened.");
     }
 
+    function claim10Coins()
+    {
+        for(let i = 0; i < 10; i++)
+        {
+            setTimeout(function()
+                       {
+                getEBCN('coins-inventory-type')[i].children[4].children[0].click();
+            }, 3000);
+        }
+        console.log("10 coin(s) opened.");
+    }
 
     setInterval(function()
                 {
         bet("A");
+        //openCratesFromInv();			//uncomment this line to Open Crates while on Inventory page.
+        //claimAllCoins();				//uncomment this line to Claim Coins while on Inventory page.
+        //claim10Coins();				//same as line above, but it claims in groups of 10.
     }, 1000);
 
 })();
