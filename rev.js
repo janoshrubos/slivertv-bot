@@ -12,7 +12,6 @@
 // @include      https://www.sliver.tv/win/sliverspotlight
 // @include      https://www.sliver.tv/win/theta
 // @include      https://www.sliver.tv/win/wow
-// @include      https://www.sliver.tv/account/inventory
 // @match        https://www.sliver.tv/win/fortnite
 // @match        https://www.sliver.tv/win/pubg
 // @match        https://www.sliver.tv/win/lol
@@ -22,6 +21,7 @@
 // @match        https://www.sliver.tv/win/theta
 // @match        https://www.sliver.tv/win/wow
 // @match        https://www.sliver.tv/account/inventory
+// @include      https://www.sliver.tv/account/inventory
 // @grant        none
 // ==/UserScript==
 
@@ -153,6 +153,7 @@
 
     function style()
     {
+
         contentPanel.innerHTML = "";
         fixedWallet.innerHTML = "";
         miniGamePanel.style.flexBasis = "100%";
@@ -228,7 +229,7 @@
             setTimeout(function()
                        {
                 getEBCN('coins-inventory-type')[i].children[4].children[0].click();
-            }, 3000);
+            }, 1000);
         }
         console.log("10 coin(s) opened.");
     }
